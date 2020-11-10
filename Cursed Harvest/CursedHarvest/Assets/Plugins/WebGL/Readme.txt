@@ -1,1 +1,0 @@
-These WEBGL plugins enable saving (HandleIO.jslib) and opening of windows (OpenWindow.jslib) 
