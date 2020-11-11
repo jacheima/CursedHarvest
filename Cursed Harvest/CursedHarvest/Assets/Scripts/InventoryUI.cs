@@ -5,11 +5,14 @@ using UnityEngine;
 public class InventoryUI : MonoBehaviour
 {
     public Transform itemsParent;
+    public Transform equippedItemParent;
     public GameObject inventoryUI;
 
     Inventory inventory;
 
     InventorySlot[] slots;
+
+    public InventorySlot[] equipedSlots;
 
     void Start()
     {
@@ -17,6 +20,7 @@ public class InventoryUI : MonoBehaviour
         inventory.onItemChangedCallback += UpdateUI;
 
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
+        equipedSlots = equippedItemParent.GetComponentsInChildren<InventorySlot>();
     }
 
     void Update()
@@ -38,6 +42,18 @@ public class InventoryUI : MonoBehaviour
             else
             {
                 slots[i].ClearSlot();
+            }
+        }
+
+        for(int i = 0; i < equipedSlots.Length; i++)
+        {
+            if(i < inventory.equippedItems.Count)
+            {
+                equipedSlots[i].AddItem(inventory.equippedItems[i]);
+            }
+            else
+            {
+                equipedSlots[i].ClearSlot();
             }
         }
     }

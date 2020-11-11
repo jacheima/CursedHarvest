@@ -34,6 +34,7 @@ public abstract class Character : MonoBehaviour
         {
             AnimateMovement();
             RemoveFocus();
+            
         }
         else
         {

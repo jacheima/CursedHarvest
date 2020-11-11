@@ -430,7 +430,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 419636044538856524, guid: d0e407b366d843f4aa09dd957fb20d13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -460,6 +460,7 @@ MonoBehaviour:
   currentTile: {fileID: 0}
   selectedTile: {fileID: 0}
   plowTime: 2
+  plantTime: 2
   timer: 0
   actionBar: {fileID: 399015541}
   actionFill: {fileID: 1731342149}

@@ -9,6 +9,7 @@ public class Player : Character
     public Tile selectedTile;
 
     public float plowTime;
+    public float plantTime;
 
     public float timer;
 
@@ -42,6 +43,7 @@ public class Player : Character
             case PlayerStates.watering:
                 break;
             case PlayerStates.planting:
+                Planting();
                 break;
             case PlayerStates.harvesting:
                 break;
@@ -54,6 +56,16 @@ public class Player : Character
         base.Update();
     }
 
+    protected override void Move()
+    {
+        base.Move();
+
+        if(rigidbody.velocity.x != 0 || rigidbody.velocity.y != 0)
+        {
+            currentState = PlayerStates.none;
+        }
+    }
+
     void Plowing()
     {
         actionBar.SetActive(true);
@@ -64,12 +76,44 @@ public class Player : Character
 
         if (timer < 0)
         {
+            selectedTile.isPlowed = true;
             actionBar.SetActive(false);
             actionFill.fillAmount = 1;
             selectedTile.ChangeTileToPlowTile();
             currentState = PlayerStates.none;
         }
 
+    }
+
+    void Planting()
+    {
+        //do we have a seed equiped
+        if(Inventory.instance.HasSeedEquiped())
+        {
+            Debug.Log("Seed is equipped");
+            //start planting
+            actionBar.SetActive(true);
+
+            timer -= Time.deltaTime;
+
+            actionFill.fillAmount = timer / plantTime;
+
+            if (timer < 0)
+            {
+                selectedTile.hasPlant = true;
+                actionBar.SetActive(false);
+                actionFill.fillAmount = 1;
+
+                //plant seed
+                Instantiate(Inventory.instance.GetEquippedItemByType(Item.ItemType.seed).prefab, selectedTile.transform.position, selectedTile.transform.rotation);
+
+                Inventory.instance.RemoveEquippedItem(Inventory.instance.GetEquippedItemByType(Item.ItemType.seed));
+                
+                currentState = PlayerStates.none;
+            }
+        }
+
+        
     }
 
     void SelectTile()
@@ -129,7 +173,8 @@ public class Player : Character
         {
             if (selectedTile != null)
             {
-                selectedTile.PlowTile(this);
+                selectedTile.Interact();
+                
             }
         }
 

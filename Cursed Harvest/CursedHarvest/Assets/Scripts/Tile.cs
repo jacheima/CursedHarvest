@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class Tile : Interactable
 {
     [SerializeField] private Sprite grassSprite;
     [SerializeField] private Sprite plowedSprite;
@@ -11,25 +11,57 @@ public class Tile : MonoBehaviour
     [HideInInspector] public int col;
 
     public bool isPlowed = false;
+    public bool hasPlant = false;
+
+    Player player;
+
+    private void Start()
+    {
+        player = FindObjectOfType<Player>();
+    }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.GetComponent<Player>())
         {
-            Debug.Log("Hellow");
             collision.GetComponent<Player>().currentTile = this;
         }
     }
 
-    public void PlowTile(Player player)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!isPlowed)
+        if (player)
         {
+            player.currentTile = this;
+        }
+    }
+
+    public override void Interact()
+    {
+        if(!isPlowed)
+        {
+            PlowTile();
+        }
+
+        if(isPlowed && !hasPlant)
+        {
+            PlantTile();
+        }
+
+        //base.Interact();
+    }
+
+    public void PlowTile()
+    {
             player.currentState = Player.PlayerStates.plowing;
             player.timer = player.plowTime;
-            isPlowed = true;
-        }
+    }
+
+    public void PlantTile()
+    {
+            player.currentState = Player.PlayerStates.planting;
+            player.timer = player.plantTime;
     }
 
     public void ChangeTileToPlowTile()

@@ -27,6 +27,10 @@ public class Inventory : MonoBehaviour
 
     public List<Item> items = new List<Item>();
 
+    public List<Item> equippedItems = new List<Item>();
+
+    float equippedSpace = 9;
+
 
     public bool Add(Item item)
     {
@@ -50,6 +54,41 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
+    public bool EquipItem(Item item)
+    {
+        if(!item.isDefaultItem)
+        {
+            if(equippedItems.Count < equippedSpace)
+            {
+                equippedItems.Add(item);
+                items.Remove(item);
+            }
+            else
+            {
+                return false;
+            }
+
+            if (onItemChangedCallback != null)
+            {
+                onItemChangedCallback.Invoke();
+            }
+        }
+
+        return true;
+
+        
+    }
+
+    public void RemoveEquippedItem(Item item)
+    {
+        equippedItems.Remove(item);
+
+        if (onItemChangedCallback != null)
+        {
+            onItemChangedCallback.Invoke();
+        }
+    }
+
     public void Remove(Item item)
     {
         items.Remove(item);
@@ -58,5 +97,31 @@ public class Inventory : MonoBehaviour
         {
             onItemChangedCallback.Invoke();
         }
+    }
+
+    public bool HasSeedEquiped()
+    {
+        for(int i = 0; i < equippedItems.Count; i++)
+        {
+            if(equippedItems[i].type == Item.ItemType.seed)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Item GetEquippedItemByType(Item.ItemType itemType)
+    {
+        for(int i = 0; i < equippedItems.Count; i++)
+        {
+            if(equippedItems[i].type == itemType)
+            {
+                return equippedItems[i];
+            }
+        }
+
+        return null;
     }
 }

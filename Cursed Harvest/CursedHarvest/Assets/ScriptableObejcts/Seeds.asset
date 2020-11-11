@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6886f9f3228a364ea1a25fa4cbc34af, type: 3}
   m_Name: Seeds
   m_EditorClassIdentifier: 
+  type: 1
   itemName: Cabbadger Seeds
   icon: {fileID: 21300000, guid: 37c157551e4bf23439f00246f8f4cbb6, type: 3}
   isDefaultItem: 0
+  prefab: {fileID: 1473373567790262094, guid: 5f13b4fc417f18540907c5d02fa7aaf1, type: 3}
