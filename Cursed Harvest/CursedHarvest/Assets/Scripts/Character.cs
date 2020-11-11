@@ -6,6 +6,11 @@ public abstract class Character : MonoBehaviour
 {
     [SerializeField] protected float speed;
 
+    [SerializeField] protected Rigidbody2D rigidbody;
+
+    public Interactable focus;
+
+
     protected Vector2 direction;
 
     protected Animator animator;
@@ -13,6 +18,7 @@ public abstract class Character : MonoBehaviour
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void Update()
@@ -22,16 +28,19 @@ public abstract class Character : MonoBehaviour
 
     protected virtual void Move()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
+        rigidbody.velocity = direction * speed;
 
-        if(direction.x != 0 || direction.y != 0)
+        if(rigidbody.velocity.x != 0 || rigidbody.velocity.y != 0)
         {
             AnimateMovement();
+            RemoveFocus();
         }
         else
         {
             animator.SetLayerWeight(1, 0);
         }
+
+        
     }
 
     protected void AnimateMovement()
@@ -41,5 +50,28 @@ public abstract class Character : MonoBehaviour
         animator.SetFloat("y", direction.y);
     }
 
-    
+    protected virtual void SetFocus(Interactable newFocus)
+    {
+        if(newFocus != focus)
+        {
+            if(focus != null)
+            {
+                focus.OnDefocused();
+            }
+
+            focus = newFocus;
+        }
+
+        newFocus.OnFocused(transform);
+    }
+
+    protected virtual void RemoveFocus()
+    {
+        if (focus != null)
+        {
+            focus.OnDefocused();
+        }
+
+        focus = null;
+    }
 }

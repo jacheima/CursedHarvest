@@ -10,7 +10,8 @@ public class Tile : MonoBehaviour
     [HideInInspector] public int row;
     [HideInInspector] public int col;
 
-    private bool isPlowed;
+    public bool isPlowed = false;
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -21,12 +22,23 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void PlowTile()
+    public void PlowTile(Player player)
     {
         if (!isPlowed)
         {
-            this.GetComponent<SpriteRenderer>().sprite = plowedSprite;
-            isPlowed = true; 
+            player.currentState = Player.PlayerStates.plowing;
+            player.timer = player.plowTime;
+            isPlowed = true;
         }
+    }
+
+    public void ChangeTileToPlowTile()
+    {
+        GetComponent<SpriteRenderer>().sprite = plowedSprite;
+    }
+
+    public void ChangeTileToGrassSprite()
+    {
+        GetComponent<SpriteRenderer>().sprite = grassSprite;
     }
 }
